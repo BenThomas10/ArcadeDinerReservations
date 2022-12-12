@@ -1,0 +1,32 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* Provide sufficient contrast against white background */
+a {
+  color: inherit;
+}
+
+code {
+  color: #e01a76;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+.btn-retro {
+  color: #fff;
+  background-color: #d63384;
+  border-color: #fff;
+}
+
+.btn-retro-danger {
+  color: #fff;
+  background-color: #dc3545;
+  border-color: #fff
+}
+
+.text-retro {
+  color: #d63384;
+}

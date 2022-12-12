@@ -1,0 +1,172 @@
+<div class="text-light p-3">
+  <div *ngIf="!visibleReservationUpdate">
+    <div *ngIf="!visibleReservationCreation">
+      <input type="button" value="Create new reservation" class="btn btn-retro" (click)="viewCreateReservation()">
+    </div>
+  </div>
+  <div *ngIf="visibleReservationCreation" class="text-light p-3">
+    <form #reservationInfo="ngForm" name="formCreate" (ngSubmit)="onSubmit(reservationInfo.value)" ngNativeValidate>
+      <div>
+        <div>
+          <div class="col-md-3">
+            <label for="partyName">Party Name: </label>
+          </div>
+          <div class="col-md-3">
+            <input type="text" name="partyName" class="form-control" ngModel required />
+          </div>
+        </div>
+        <div>
+          <div class="col-md-3">
+            <label for="numberInParty">Party Size: </label>
+          </div>
+          <div class="col-sm-1">
+            <input type="number" [min]="1" [max]="25" name="numberInParty" class="form-control" ngModel required />
+          </div>
+        </div>
+        <div>
+          <div class="col-md-2">
+            <label for="reservationDate">Date: </label>
+          </div>
+          <div class="col-sm-2">
+            <input type="date" name="reservationDate" [min]="minDateVar" class="form-control" ngModel required />
+          </div>
+        </div>
+        <div>
+          <div class="col-md-2">
+            <label for="reservationTime">Time: </label>
+          </div>
+          <div class="col-sm-2">
+            <input type="time" name="reservationTime" class="form-control" ngModel required />
+          </div>
+        </div>
+        <div>
+          <div class="col-md-3">
+            <label for="email">Email: </label>
+          </div>
+          <div class="col-md-4">
+            <input type="email" name="email" class="form-control" ngModel required />
+          </div>
+        </div>
+        <div>
+        </div>
+      </div>
+      <br />
+      <input type="submit" value="Submit" class="btn btn-retro" ng-disabled="formCreate.$invalid" /> &nbsp;
+      <input type="submit" value="Cancel" class="btn btn-retro-danger" (click)="onCancel()" />
+    </form>
+  </div>
+  <div *ngIf="visibleReservationUpdate">
+    <form #reservationInfo="ngForm" name="formUpdate" (ngSubmit)="onUpdate(reservationInfo.value)" ngNativeValidate>
+      <div>
+        <div>
+          <div class="col-md-3">
+            <label for="partyName">Party Name: </label>
+          </div>
+          <div class="col-md-3">
+            <input type="text" name="partyName" class="form-control" [(ngModel)]="partyNameVar" required />
+          </div>
+        </div>
+        <div>
+          <div class="col-md-3">
+            <label for="numberInParty">Party Size: </label>
+          </div>
+          <div class="col-sm-1">
+            <input type="number" name="numberInParty" class="form-control" [(ngModel)]="numberInPartyVar" required />
+          </div>
+        </div>
+        <div>
+          <div class="col-md-3">
+            <label for="reservationDate">Date: </label>
+          </div>
+          <div class="col-sm-2">
+            <!--TODO : this should validate and only display selecable dates based on capacity (sum of numbeInParty vs maximum) between date and hours-->
+            <input type="date" name="reservationDate" [min]="minDateVar" class="form-control" [(ngModel)]="reservationDateVar" required />
+          </div>
+        </div>
+        <div>
+          <div class="col-md-3">
+            <label for="reservationTime">Time: </label>
+          </div>
+          <div class="col-sm-2">
+            <!--TODO : this should validate and only display selecable times based on capacity and the Diner's close/open times-->
+            <input type="time" name="reservationTime"  [min]="minTimeVar" class="form-control" [(ngModel)]="reservationTimeVar" required />
+          </div>
+        </div>
+        <div>
+          <div class="col-md-3">
+            <label for="reservationNumber">Reservation#: </label>
+          </div>
+          <div class="col-sm-2">
+           <!--TODO : this should automate, validate, and not allow duplicates-->
+            <input type="number" name="reservationNumber" class="form-control" [(ngModel)]="reservationNumberVar" required />
+          </div>
+        </div>
+        <div>
+          <div class="col-md-3">
+            <label for="email">Email: </label>
+          </div>
+          <div class="col-md-4">
+            <input type="email" name="email" class="form-control" [(ngModel)]="emailVar" required />
+          </div>
+        </div>
+        <div>
+          <div class="col-md-3">
+            <label for="isFulfilled">FulFilled: </label>
+          </div>
+          <div class="col-md-6">
+            <input type="checkbox" name="isFulfilled" [(ngModel)]="isFulfilledVar" />
+          </div>
+        </div>
+        <div>
+          <div class="col-md-3">
+            <label for="reservationId" hidden>Id: </label>
+          </div>
+          <div class="col-md-3">
+            <input hidden type="text" name="reservationId" [(ngModel)]="reservationIdVar" />
+          </div>
+        </div>
+      </div>
+      <br />
+      <input type="submit" value="Update" class="btn btn-retro" ng-disabled="formUpdate.$invalid" /> &nbsp;
+      <input type="submit" value="Cancel" class="btn btn-retro-danger" (click)="onCancel()" />
+    </form>
+  </div>
+  <br />
+  <br />
+  <div class="text-light p-3">
+    <div *ngIf="!visibleReservationUpdate">
+      <div *ngIf="!visibleReservationCreation">
+        <table class="table text-light p-3">
+          <thead>
+            <tr>
+          <th>Party Name</th>
+          <th>Size</th>
+          <th>Date</th>
+          <th>Time</th>
+          <th>Reservation#</th>
+          <th>Email</th>
+          <th>Fulfilled</th>
+          </tr>
+          </thead>
+          <tbody *ngIf="reservationInformation">
+            <tr *ngFor="let regInfo of reservationInformation" class="text-light p-3">
+              <td>{{regInfo.partyName}}</td>
+              <td>{{regInfo.numberInParty}}</td>
+              <td>{{regInfo.reservationDate | date:'shortDate'}}</td>
+              <td>{{regInfo.reservationTime}}</td>
+              <td>{{regInfo.reservationNumber}}</td>
+              <td>{{regInfo.email}}</td>
+              <td>{{regInfo.isFulfilled}}</td>
+              <td hidden>{{regInfo.reservationId}}</td>
+              <td>
+                <input type="button" value="Edit" class="btn btn-retro" (click)="viewUpdateReservation(regInfo.reservationId)" /> &nbsp;
+                <input type="button" value="Delete" class="btn btn-retro-danger" (click)="deleteReservation(regInfo.reservationId)" />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
